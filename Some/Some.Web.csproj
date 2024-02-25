@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Some.Domain\Some.Domain.csproj" />
+    <ProjectReference Include="..\Some.Importer\Some.Importer.csproj" />
+  </ItemGroup>
+
 </Project>

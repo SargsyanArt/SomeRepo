@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Some.Importer;
 
 namespace Some.Pages
 {
@@ -12,9 +12,10 @@ namespace Some.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public async void OnGet()
         {
-
+            //await DataHandler.GetFromPolygon();
+            await DataHandler.GetFromPolygonContinuously();
         }
     }
 }
