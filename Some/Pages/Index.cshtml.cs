@@ -14,8 +14,7 @@ namespace Some.Pages
 
         public async void OnGet()
         {
-            //await DataHandler.GetFromPolygon();
-            await DataHandler.GetFromPolygonContinuously();
+            //await DataHandler.GetFromSocketConnection();
         }
     }
 }

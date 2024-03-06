@@ -7,3 +7,95 @@
 <div class="text-center">
     <h1 class="display-4">Shalala la la</h1>
 </div>
+<div>
+    <canvas id="chart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const canvas = document.getElementById('chart');
+    canvas.height = 75;
+
+    const labels = [
+         new Date().toLocaleTimeString(),
+         new Date().toLocaleTimeString(),
+         new Date().toLocaleTimeString(),
+         new Date().toLocaleTimeString(),
+         new Date().toLocaleTimeString(),
+         new Date().toLocaleTimeString(),
+    ];
+
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Some really really important data',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 4, 3, 8],
+        }]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            x: {
+                radius: {
+                    duration: 1000,
+                    easing: 'easeInOutBounce',
+                    from: 1,
+                    to: 0,
+                    loop: true
+                }
+            },
+            scales: {
+                y: { // defining min and max so hiding the dataset does not change scale range
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    };
+
+    const chart = new Chart(
+        canvas,
+        config
+    );
+
+    const socket = new WebSocket('wss://localhost:7002/ws');
+    // Connection opened
+    socket.onopen = (event) => {
+        console.log('WebSocket connection opened:', event);
+    };
+
+    // Listen for messages
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log('Received message:', data);
+        addData(chart, data.Time, data.Value);
+    };
+
+    // Connection closed
+    socket.onclose = (event) => {
+        console.log('WebSocket connection closed:', event);
+    };
+
+    // Connection error
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+
+
+
+    // function to update the chart
+    function addData(chart, label, data) {
+        chart.data.labels.shift();
+        chart.data.labels.push(label);
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.shift();
+            dataset.data.push(data);
+        });
+        chart.update();
+    }
+</script>
